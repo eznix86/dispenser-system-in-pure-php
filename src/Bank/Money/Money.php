@@ -54,7 +54,7 @@ class Money
         return $this;
     }
 
-    public function substract(Money $money)
+    public function subtract(Money $money)
     {
         $this->amount -= $money->amount;
         return $this;

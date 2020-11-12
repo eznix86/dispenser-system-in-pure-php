@@ -6,6 +6,7 @@ namespace App\Bank\Security;
 
 use App\Bank\Repository\UserRepository;
 use App\Bank\Session\UserSessionManager;
+use App\Container\ContainerService;
 
 class Security
 {
@@ -21,10 +22,11 @@ class Security
      */
     private $userSessionManager;
 
-    public function __construct(UserRepository $userRepository, UserSessionManager $userSessionManager)
+    public function __construct(ContainerService $containerService)
     {
-        $this->userRepository = $userRepository;
-        $this->userSessionManager = $userSessionManager;
+
+        $this->userRepository = $containerService->get('user_repository');
+        $this->userSessionManager = $containerService->get('session');
     }
 
     /**

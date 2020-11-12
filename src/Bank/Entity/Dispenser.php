@@ -55,7 +55,7 @@ class Dispenser
 
     function viewBalance()
     {
-        $amount = (string) $this->selectedAccount->getAmount();
+        $amount = (string) $this->getSelectedAccount()->getAmount();
         echo sprintf("\n\n%s has %s\n\n", $this->userSessionManager->getUser(), $amount);
     }
 
@@ -65,13 +65,13 @@ class Dispenser
      */
     function withDraw(Money $money)
     {
-        $amountChanged = $this->selectedAccount->getAmount()->substract($money);
+        $amountChanged = $this->getSelectedAccount()->getAmount()->subtract($money);
 
         if ($amountChanged->getAmount() < 0) {
             throw new \Exception("Not enough balance");
         }
 
-        $this->selectedAccount->setAmount($amountChanged);
+        $this->getSelectedAccount()->setAmount($amountChanged);
 
         echo sprintf("\nYou successfully withdraw %s, current amount: %s\n", $money, $amountChanged);
 
@@ -82,9 +82,9 @@ class Dispenser
      */
     function insert(Money $money)
     {
-        $amountChanged = $this->selectedAccount->getAmount()->add($money);
+        $amountChanged = $this->getSelectedAccount()->getAmount()->add($money);
 
-        $this->selectedAccount->setAmount($amountChanged);
+        $this->getSelectedAccount()->setAmount($amountChanged);
 
         echo sprintf("\nYou successfully add %s, current amount: %s\n", $money, $amountChanged);
     }

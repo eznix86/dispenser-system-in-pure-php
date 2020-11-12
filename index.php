@@ -6,13 +6,31 @@ use App\Cli\Client;
 
 require_once __DIR__."/vendor/autoload.php";
 
-$userRepository = new App\Bank\Repository\UserRepository();
-$accountRepository = new App\Bank\Repository\AccountRepository();
-$sessionManager = new App\Bank\Session\UserSessionManager();
-$security = new Security($userRepository, $sessionManager);
-$dispenser = new Dispenser($accountRepository, $userRepository, $security, $sessionManager);
+$container = [];
 
-$app = new Client($security, $sessionManager, $dispenser);
+$container["container"] = new App\Container\ContainerService();
+
+$container["user_repository"] = new App\Bank\Repository\UserRepository();
+$container["container"]->setContainer($container);
+
+$container["account_repository"] = new App\Bank\Repository\AccountRepository();
+$container["container"]->setContainer($container);
+
+$container["session"] = new App\Bank\Session\UserSessionManager();
+$container["container"]->setContainer($container);
+
+$container["security"] = new Security($container["container"]);
+$container["container"]->setContainer($container);
+
+$container["dispenser"] = new Dispenser($container["account_repository"], $container["user_repository"], $container["security"], $container['session']);
+$container["container"]->setContainer($container);
+
+$app = new Client($container["security"], $container['session'], $container["dispenser"]);
+
+$container["container"]->setContainer($container);
+
+
+
 
 $app->run();
 

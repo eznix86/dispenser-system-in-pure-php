@@ -99,9 +99,7 @@ class Client
     }
 
     public function init() {
-        $create = true;
-
-        while ($create) {
+         do {
             try {
                 $this->dispenser->createAccount();
             } catch (\Exception $exception) {
@@ -111,11 +109,6 @@ class Client
 
             $choice = readline("Continue create accounts? (y/n) ");
 
-            switch ($choice) {
-                case 'n' || 'N':
-                    $create = false;
-                    break;
-            }
-        }
+        } while (preg_match("/y/i", $choice) !== 0);
     }
 }
